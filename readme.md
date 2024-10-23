@@ -59,6 +59,9 @@ logistics-demo/
    - **Driver Interface:** Open a new tab and navigate to `http://localhost:3000/driver.html` for the driver dashboard.
 
 
+
+## ER Diagram
+
 ![alt text](er.drawio.png)
 
 ## How to Use
