@@ -1,35 +1,43 @@
 /* public/style.css */
 
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    background-color: #f8f9fa;
 }
 
 h1, h2 {
-    color: #333;
+    color: #343a40;
 }
 
-div {
-    margin-bottom: 10px;
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-label {
-    display: inline-block;
-    width: 150px;
+.btn-primary {
+    background-color: #007bff;
+    border: none;
 }
 
-input, select {
-    padding: 5px;
-    width: 200px;
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 
-button {
-    padding: 10px 20px;
-    cursor: pointer;
+.btn-success {
+    background-color: #28a745;
+    border: none;
 }
 
-#availableBookings div {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+.btn-success:hover {
+    background-color: #1e7e34;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    .form-control, .form-select, .btn {
+        width: 100%;
+    }
 }

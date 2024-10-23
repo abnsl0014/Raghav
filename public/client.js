@@ -2,8 +2,9 @@
 
 const socket = io();
 
+// Handle Booking Button Click
 document.getElementById('bookBtn').addEventListener('click', () => {
-    const userId = document.getElementById('userId').value;
+    const userId = document.getElementById('userId').value.trim();
     const pickup = parseInt(document.getElementById('pickup').value);
     const dropoff = parseInt(document.getElementById('dropoff').value);
     const vehicleType = document.getElementById('vehicleType').value;
@@ -17,7 +18,13 @@ document.getElementById('bookBtn').addEventListener('click', () => {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                document.getElementById('bookingStatus').innerText = `Booking ID: ${data.booking.id} | Status: ${data.booking.status} | Estimated Cost: $${data.booking.estimatedCost}`;
+                document.getElementById('bookingStatus').innerHTML = `
+                    <p><strong>Booking ID:</strong> ${data.booking.id}</p>
+                    <p><strong>Status:</strong> ${data.booking.status}</p>
+                    <p><strong>Estimated Cost:</strong> $${data.booking.estimatedCost}</p>
+                `;
+            } else {
+                alert('Failed to create booking.');
             }
         });
     } else {
@@ -25,10 +32,10 @@ document.getElementById('bookBtn').addEventListener('click', () => {
     }
 });
 
-// Register user with Socket.IO
+// Register user with Socket.IO when User ID input loses focus
 const userIdInput = document.getElementById('userId');
 userIdInput.addEventListener('blur', () => {
-    const userId = userIdInput.value;
+    const userId = userIdInput.value.trim();
     if (userId) {
         socket.emit('registerUser', userId);
     }
@@ -36,10 +43,18 @@ userIdInput.addEventListener('blur', () => {
 
 // Listen for booking acceptance
 socket.on('bookingAccepted', (booking) => {
-    document.getElementById('bookingStatus').innerText = `Booking ID: ${booking.id} | Status: ${booking.status} | Driver Assigned: ${booking.driverId}`;
+    document.getElementById('bookingStatus').innerHTML = `
+        <p><strong>Booking ID:</strong> ${booking.id}</p>
+        <p><strong>Status:</strong> ${booking.status}</p>
+        <p><strong>Driver Assigned:</strong> ${booking.driverId}</p>
+    `;
 });
 
 // Listen for status updates
 socket.on('statusUpdate', (data) => {
-    document.getElementById('driverLocation').innerText = `Booking ID: ${data.bookingId} | Status: ${data.status} | Driver Location: ${data.location}`;
+    document.getElementById('driverLocation').innerHTML = `
+        <p><strong>Booking ID:</strong> ${data.bookingId}</p>
+        <p><strong>Status:</strong> ${data.status}</p>
+        <p><strong>Driver Location:</strong> ${data.location}</p>
+    `;
 });
