@@ -1,0 +1,92 @@
+<!-- public/driver.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logistics Platform - Driver</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Driver Dashboard</h1>
+    <div>
+        <label>Driver ID:</label>
+        <input type="text" id="driverId" placeholder="Enter your driver ID">
+    </div>
+    <button id="registerDriverBtn">Register Driver</button>
+
+    <h2>Available Bookings</h2>
+    <div id="availableBookings"></div>
+
+    <h2>Current Booking Status</h2>
+    <div id="currentStatus"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        document.getElementById('registerDriverBtn').addEventListener('click', () => {
+            const driverId = document.getElementById('driverId').value;
+            if (driverId) {
+                socket.emit('registerDriver', driverId);
+                alert('Driver Registered!');
+            }
+        });
+
+        // Listen for new bookings
+        socket.on('newBooking', (booking) => {
+            const bookingsDiv = document.getElementById('availableBookings');
+            const bookingElement = document.createElement('div');
+            bookingElement.innerHTML = `
+                <p>Booking ID: ${booking.id} | Pickup: ${booking.pickup} | Drop-off: ${booking.dropoff} | Vehicle: ${booking.vehicleType} | Price: $${booking.estimatedCost}</p>
+                <button onclick="acceptBooking(${booking.id})">Accept Booking</button>
+                <hr>
+            `;
+            bookingsDiv.appendChild(bookingElement);
+        });
+
+        function acceptBooking(bookingId) {
+            const driverId = document.getElementById('driverId').value;
+            fetch('/api/driver/accept', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ driverId, bookingId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Booking Accepted!');
+                    document.getElementById('currentStatus').innerText = `Current Booking ID: ${data.booking.id} | Status: ${data.booking.status}`;
+                } else {
+                    alert('Failed to accept booking.');
+                }
+            });
+        }
+
+        // Function to update status (for demo purposes)
+        function updateStatus(status) {
+            const driverId = document.getElementById('driverId').value;
+            fetch('/api/driver/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ driverId, status, location: Math.floor(Math.random() * 100) })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('currentStatus').innerText = `Current Booking ID: ${data.booking.id} | Status: ${data.booking.status}`;
+                }
+            });
+        }
+
+        // Example: Update status every 10 seconds
+        setInterval(() => {
+            const statuses = ['En Route', 'Goods Collected', 'Delivered'];
+            const currentStatus = document.getElementById('currentStatus').innerText;
+            if (currentStatus.includes('Current Booking ID')) {
+                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                updateStatus(randomStatus);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

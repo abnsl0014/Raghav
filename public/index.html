@@ -1,0 +1,42 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logistics Platform - User</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Book a Ride</h1>
+    <div>
+        <label>User ID:</label>
+        <input type="text" id="userId" placeholder="Enter your user ID">
+    </div>
+    <div>
+        <label>Pickup Location:</label>
+        <input type="number" id="pickup" placeholder="Enter pickup location (numeric)">
+    </div>
+    <div>
+        <label>Drop-off Location:</label>
+        <input type="number" id="dropoff" placeholder="Enter drop-off location (numeric)">
+    </div>
+    <div>
+        <label>Vehicle Type:</label>
+        <select id="vehicleType">
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+        </select>
+    </div>
+    <button id="bookBtn">Book Now</button>
+
+    <h2>Booking Status</h2>
+    <div id="bookingStatus"></div>
+
+    <h2>Driver Location</h2>
+    <div id="driverLocation"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
