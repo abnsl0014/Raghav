@@ -79,22 +79,64 @@ This project uses a simple client-server architecture with Socket.IO for real-ti
 - **Real-Time Updates:** Socket.IO is used to update the status of bookings and track driver locations.
 - **Database:** In-memory storage is used for simplicity. In a production environment, you would use a persistent database like MongoDB or PostgreSQL.
 
+## High-Level Design (HLD)
+
+The system is designed to handle requests from users, drivers, and admins while ensuring scalability, availability, and reliability. Below is an overview of the core components of the architecture:
+
+### Architecture Components
+
+1. **Web and Mobile Clients**: Interfaces for Users, Drivers, and Admins to interact with the platform.
+   - Technologies: Web (HTML, CSS, JavaScript), Mobile (React Native or similar).
+
+2. **API Gateway**: Acts as an entry point for all requests, forwarding them to appropriate backend services.
+   - Role: Authentication, routing, rate limiting, and request aggregation.
+
+3. **Backend Microservices**:
+   - **Booking Service**: Handles ride bookings, assigns drivers, and manages booking states.
+   - **Tracking Service**: Provides real-time updates on the driver's location using Socket.IO/WebSockets.
+   - **Pricing Service**: Calculates estimated costs based on distance, vehicle type, and demand.
+   - **Driver Service**: Manages driver status, vehicle details, and job assignments.
+
+4. **Databases**:
+   - **SQL Database (PostgreSQL)**: Stores user, driver, and booking details.
+   - **NoSQL Database (MongoDB)**: Stores real-time tracking data and driver activities.
+   - **Redis**: Used for caching frequent queries and session management.
+
+5. **Load Balancer**: Distributes incoming requests across multiple servers to ensure no single server is overwhelmed.
+   - Technologies: Nginx, AWS Elastic Load Balancer.
+
+6. **Real-Time Communication**: Socket.IO or WebSockets for maintaining real-time connections between users, drivers, and the backend for continuous location tracking and booking updates.
+
+7. **External Services**:
+   - **GPS Integration**: Integration with GPS APIs for accurate driver location tracking.
+   - **Payment Gateway**: Handles payments securely using services like Stripe or PayPal.
+
+### Data Flow
+1. **User Booking Request**: The user sends a booking request, which is handled by the **Booking Service**. The **Driver Service** finds an available driver, and the **Tracking Service** provides real-time updates.
+2. **Driver Job Assignment**: When a user books a ride, the **Driver Service** matches the request with a nearby driver, and the driver is notified in real time.
+3. **Real-Time Updates**: The **Tracking Service** provides location updates via **Socket.IO**, keeping users informed about the driver's progress.
+
+### Scalability Considerations
+- **Horizontal Scalability**: Each service can be scaled horizontally by adding more instances.
+- **Service Discovery**: Tools like **Consul** or **Eureka** can be used for service discovery to facilitate easy communication between services.
+- **Fault Tolerance**: Implement retry mechanisms and use circuit breakers for improved fault tolerance.
+
 ## Scalability Considerations
-- **Load Balancing:** In a real-world application, you would use load balancers to handle high traffic and manage thousands of concurrent users.
-- **Database Scaling:** To handle a large number of users and drivers, the database must be distributed and replicated across nodes for performance.
-- **Real-Time Tracking:** For thousands of concurrent connections, you would need an efficient way to manage WebSockets and scale horizontally using cloud services like AWS or Azure.
+- **Load Balancing**: In a real-world application, you would use load balancers to handle high traffic and manage thousands of concurrent users.
+- **Database Scaling**: To handle a large number of users and drivers, the database must be distributed and replicated across nodes for performance.
+- **Real-Time Tracking**: For thousands of concurrent connections, you would need an efficient way to manage WebSockets and scale horizontally using cloud services like AWS or Azure.
 
 ## Improvements for Future
-- **Authentication and Authorization:** Implement secure login for Users, Drivers, and Admins.
-- **Persistent Storage:** Use a database such as PostgreSQL for users, drivers, and bookings data.
-- **Enhanced Real-Time Tracking:** Integrate a real map API (such as Google Maps) for accurate driver tracking.
-- **Payment Integration:** Include a payment gateway to handle payment transactions.
+- **Authentication and Authorization**: Implement secure login for Users, Drivers, and Admins.
+- **Persistent Storage**: Use a database such as PostgreSQL for users, drivers, and bookings data.
+- **Enhanced Real-Time Tracking**: Integrate a real map API (such as Google Maps) for accurate driver tracking.
+- **Payment Integration**: Include a payment gateway to handle payment transactions.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Author
-- ** Raghav Bansal ** - [GitHub Profile](https://github.com/raghavbansal18)
+## Authors
+- Raghav Bansal (JUIT, Solan)
 
 ## Acknowledgments
 - **Node.js** and **Express** for backend functionality.
