@@ -58,6 +58,9 @@ logistics-demo/
    - **User Interface:** Navigate to `http://localhost:3000` to access the user interface.
    - **Driver Interface:** Open a new tab and navigate to `http://localhost:3000/driver.html` for the driver dashboard.
 
+
+![alt text](er.drawio.png)
+
 ## How to Use
 
 ### User Side (Booking a Ride)
@@ -142,3 +145,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Node.js** and **Express** for backend functionality.
 - **Socket.IO** for real-time communication.
 - **Bootstrap** for enhancing the UI with minimal effort.
+
+
